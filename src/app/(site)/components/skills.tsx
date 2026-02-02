@@ -63,17 +63,17 @@ export default function Skills() {
         transition={{ duration: 0.8 }}
       />
 
-      {/* Gradient orbs */}
+      {/* Gradient orbs - consistent blue-green theme */}
       <motion.div
         className="pointer-events-none absolute -inset-20"
         animate={reduce ? {} : { x: [0, 30, -20, 0], y: [0, -20, 30, 0] }}
         transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
         style={{
-          background: "radial-gradient(circle at 20% 30%, rgba(147,51,234,0.20), transparent 45%), radial-gradient(circle at 80% 70%, rgba(77,143,255,0.18), transparent 45%)",
+          background: "radial-gradient(circle at 20% 30%, rgba(77,143,255,0.20), transparent 45%), radial-gradient(circle at 80% 70%, rgba(45,190,126,0.18), transparent 45%)",
         }}
       />
 
-      {/* Floating particles */}
+      {/* Floating particles - unified colors */}
       {mounted && !reduce && particles.map((p) => (
         <motion.div
           key={p.id}
@@ -83,7 +83,7 @@ export default function Skills() {
             top: `${p.y}%`,
             width: p.size,
             height: p.size,
-            background: p.id % 2 === 0 ? "rgba(147,51,234,0.6)" : "rgba(77,143,255,0.6)",
+            background: p.id % 2 === 0 ? "rgba(77,143,255,0.6)" : "rgba(45,190,126,0.6)",
           }}
           animate={{
             y: [0, -60, 0],
@@ -112,7 +112,7 @@ export default function Skills() {
             whileHover={{ scale: 1.02 }}
           >
             <motion.span 
-              className="h-2 w-2 rounded-full bg-purple-500"
+              className="h-2 w-2 rounded-full bg-[#4D8FFF]"
               animate={reduce ? {} : { scale: [1, 1.3, 1] }}
               transition={{ duration: 2, repeat: Infinity }}
             />
@@ -150,13 +150,12 @@ export default function Skills() {
   );
 }
 
+// Unified color scheme - blue-green gradient only
 const colors = [
   { accent: "#4D8FFF", glow: "rgba(77,143,255,0.25)" },
-  { accent: "#9333EA", glow: "rgba(147,51,234,0.25)" },
   { accent: "#2DBE7E", glow: "rgba(45,190,126,0.25)" },
-  { accent: "#F97316", glow: "rgba(249,115,22,0.25)" },
-  { accent: "#EC4899", glow: "rgba(236,72,153,0.25)" },
-  { accent: "#06B6D4", glow: "rgba(6,182,212,0.25)" },
+  { accent: "#4D8FFF", glow: "rgba(77,143,255,0.25)" },
+  { accent: "#2DBE7E", glow: "rgba(45,190,126,0.25)" },
 ];
 
 function SkillGroupCard({ 

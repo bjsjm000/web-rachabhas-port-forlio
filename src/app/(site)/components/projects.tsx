@@ -4,6 +4,17 @@ import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence, useInView, useReducedMotion } from "framer-motion";
 import { projects } from "@/data/resume";
 
+// Unified theme colors - consistent blue-green gradient
+const THEME = {
+  bg: "#070A12",
+  fg: "#FFFFFF",
+  accent: "#4D8FFF",
+  accentSecondary: "#2DBE7E",
+  border: "rgba(255, 255, 255, 0.1)",
+  surface: "rgba(255, 255, 255, 0.05)",
+  surface2: "rgba(255, 255, 255, 0.08)",
+};
+
 export default function Projects() {
   const reduce = useReducedMotion();
   const [active, setActive] = useState(0);
@@ -42,27 +53,22 @@ export default function Projects() {
     <section id="projects" ref={sectionRef} className="relative min-h-dvh w-full">
       <div className="relative left-1/2 w-screen -translate-x-1/2">
         <div className="relative min-h-dvh overflow-hidden">
-          {/* Animated Background */}
-          <motion.div 
-            className="absolute inset-0"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1, backgroundColor: p.theme.bg }}
-            transition={{ duration: 0.8, ease: easing }}
-          />
+          {/* Unified Background */}
+          <div className="absolute inset-0 bg-[#070A12]" />
           
-          {/* Animated gradient orbs */}
+          {/* Animated gradient orbs - consistent blue-green theme */}
           <motion.div
             className="pointer-events-none absolute -inset-20"
             animate={reduce ? {} : { x: [0, 30, -20, 0], y: [0, -20, 15, 0] }}
             transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
             style={{
-              background: `radial-gradient(circle at 20% 30%, ${p.theme.accent}22, transparent 50%), radial-gradient(circle at 80% 70%, ${p.theme.accent}15, transparent 45%)`,
+              background: `radial-gradient(circle at 20% 30%, rgba(77, 143, 255, 0.22), transparent 50%), radial-gradient(circle at 80% 70%, rgba(45, 190, 126, 0.15), transparent 45%)`,
             }}
           />
 
           {/* texture */}
           <motion.div 
-            className="pointer-events-none absolute inset-0 bg-[radial-gradient(#000_1px,transparent_1px)] bg-size-[18px_18px]"
+            className="pointer-events-none absolute inset-0 bg-[radial-gradient(rgba(255,255,255,0.15)_1px,transparent_1px)] bg-size-[18px_18px]"
             initial={{ opacity: 0 }}
             animate={{ opacity: isInView ? 0.06 : 0 }}
             transition={{ duration: 0.5 }}
@@ -76,7 +82,7 @@ export default function Projects() {
                   key={i}
                   className="absolute h-1 w-1 rounded-full"
                   style={{ 
-                    backgroundColor: p.theme.accent,
+                    backgroundColor: i % 2 === 0 ? THEME.accent : THEME.accentSecondary,
                     left: `${10 + (i * 7)}%`,
                     top: `${20 + (i * 6)}%`,
                   }}
@@ -87,7 +93,7 @@ export default function Projects() {
             </div>
           )}
 
-          <div className="relative flex min-h-dvh w-full items-center justify-center px-6 py-16 sm:px-10 lg:px-14" style={{ color: p.theme.fg }}>
+          <div className="relative flex min-h-dvh w-full items-center justify-center px-6 py-16 sm:px-10 lg:px-14 text-white">
             <div className="w-full max-w-7xl mx-auto">
               {/* Header */}
               <motion.div 
@@ -97,13 +103,12 @@ export default function Projects() {
                 animate={isInView ? "show" : "hidden"}
               >
                 <motion.div
-                  className="inline-flex items-center gap-2 rounded-2xl px-3 py-2 text-xs mb-4"
-                  style={{ border: `1px solid ${p.theme.border}`, background: p.theme.surface }}
+                  className="inline-flex items-center gap-2 rounded-2xl px-3 py-2 text-xs mb-4 border border-white/10 bg-white/5"
                   whileHover={{ scale: 1.02 }}
                 >
                   <motion.span 
                     className="h-2 w-2 rounded-full"
-                    style={{ backgroundColor: p.theme.accent }}
+                    style={{ backgroundColor: THEME.accent }}
                     animate={reduce ? {} : { scale: [1, 1.3, 1] }}
                     transition={{ duration: 2, repeat: Infinity }}
                   />
@@ -132,16 +137,16 @@ export default function Projects() {
                         onClick={() => setActive(i)}
                         whileHover={reduce ? undefined : { scale: 1.02, x: 4 }}
                         whileTap={reduce ? undefined : { scale: 0.98 }}
-                        className="relative w-full rounded-xl p-3 text-left"
+                        className="relative w-full rounded-xl p-3 text-left border"
                         tabIndex={0}
                         style={{
-                          border: `1px solid ${isActive ? item.theme.accent : p.theme.border}`,
-                          background: isActive ? p.theme.surface2 : p.theme.surface,
+                          borderColor: isActive ? THEME.accent : THEME.border,
+                          background: isActive ? THEME.surface2 : THEME.surface,
                         }}
                       >
                         <motion.div
                           className="absolute left-0 top-1/2 -translate-y-1/2 w-1 rounded-full"
-                          style={{ backgroundColor: item.theme.accent }}
+                          style={{ backgroundColor: THEME.accent }}
                           animate={{ height: isActive ? "50%" : 0, opacity: isActive ? 1 : 0 }}
                           transition={{ duration: 0.3, ease: easing }}
                         />
@@ -149,7 +154,7 @@ export default function Projects() {
                         <div className="flex items-center gap-2">
                           <motion.span 
                             className="h-2 w-2 shrink-0 rounded-full" 
-                            style={{ backgroundColor: item.theme.accent }}
+                            style={{ backgroundColor: i % 2 === 0 ? THEME.accent : THEME.accentSecondary }}
                             animate={isActive && !reduce ? { scale: [1, 1.3, 1] } : {}}
                             transition={{ duration: 1.5, repeat: Infinity }}
                           />
@@ -159,8 +164,8 @@ export default function Projects() {
                           </div>
                           {isActive && (
                             <span
-                              className="shrink-0 rounded-lg px-2 py-0.5 text-[9px] font-semibold uppercase"
-                              style={{ background: item.theme.accent, color: item.theme.fg ?? "#fff" }}
+                              className="shrink-0 rounded-lg px-2 py-0.5 text-[9px] font-semibold uppercase text-white"
+                              style={{ background: THEME.accent }}
                             >
                               Active
                             </span>
@@ -179,13 +184,13 @@ export default function Projects() {
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: -40, scale: 0.95 }}
                     transition={{ duration: 0.5, ease: easing }}
-                    className="relative rounded-3xl p-6 lg:p-8"
-                    style={{ border: `1px solid ${p.theme.border}`, background: p.theme.surface }}
+                    className="relative rounded-3xl p-6 lg:p-8 border"
+                    style={{ borderColor: THEME.border, background: THEME.surface }}
                   >
                     {/* Corner glow */}
                     <motion.div
                       className="absolute top-0 right-0 w-32 h-32 pointer-events-none rounded-3xl"
-                      style={{ background: `radial-gradient(circle at 100% 0%, ${p.theme.accent}30, transparent 70%)` }}
+                      style={{ background: `radial-gradient(circle at 100% 0%, ${THEME.accent}30, transparent 70%)` }}
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ delay: 0.2 }}
@@ -209,8 +214,8 @@ export default function Projects() {
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
                         whileHover={reduce ? undefined : { scale: 1.05, rotate: 2 }}
-                        className="rounded-2xl px-3 py-2 text-xs font-medium"
-                        style={{ background: p.theme.accent, color: p.theme.fg ?? "#fff" }}
+                        className="rounded-2xl px-3 py-2 text-xs font-medium text-white"
+                        style={{ background: THEME.accent }}
                       >
                         {p.badges?.[0] ?? "Project"}
                       </motion.div>
@@ -228,8 +233,8 @@ export default function Projects() {
                           key={tag}
                           variants={{ hidden: { opacity: 0, scale: 0.8, y: 10 }, show: { opacity: 1, scale: 1, y: 0 } }}
                           whileHover={reduce ? undefined : { scale: 1.1, y: -2 }}
-                          className="rounded-xl px-3 py-1 text-xs cursor-default"
-                          style={{ border: `1px solid ${p.theme.border}`, background: p.theme.surface2 }}
+                          className="rounded-xl px-3 py-1 text-xs cursor-default border"
+                          style={{ borderColor: THEME.border, background: THEME.surface2 }}
                         >
                           {tag}
                         </motion.span>
@@ -237,39 +242,37 @@ export default function Projects() {
                     </motion.div>
 
                     {/* Highlights */}
-                    {/* Highlights */}
-<motion.div 
-  className="mt-6 grid gap-3 sm:grid-cols-2 items-stretch"
-  initial="hidden"
-  animate="show"
-  variants={{ hidden: {}, show: { transition: { staggerChildren: 0.08, delayChildren: 0.4 } } }}
->
-  {p.highlights.map((h, i) => (
-    <motion.div
-      key={h}
-      variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } }}
-      whileHover={reduce ? undefined : { scale: 1.02, y: -4 }}
-      className="h-full rounded-2xl p-4 flex"   // ✅ เพิ่ม h-full + flex
-      style={{ border: `1px solid ${p.theme.border}`, background: p.theme.surface2 }}
-    >
-      <div className="flex items-start gap-3 w-full"> {/* ✅ ให้เต็มการ์ด */}
-        <motion.span 
-          className="mt-1 h-2 w-2 shrink-0 rounded-full" 
-          style={{ backgroundColor: p.theme.accent }}
-          animate={!reduce ? { scale: [1, 1.3, 1], opacity: [0.7, 1, 0.7] } : {}}
-          transition={{ duration: 2, repeat: Infinity, delay: i * 0.2 }}
-        />
-        <p className="text-sm opacity-80">{h}</p>
-      </div>
-    </motion.div>
-  ))}
-</motion.div>
-
+                    <motion.div 
+                      className="mt-6 grid gap-3 sm:grid-cols-2 items-stretch"
+                      initial="hidden"
+                      animate="show"
+                      variants={{ hidden: {}, show: { transition: { staggerChildren: 0.08, delayChildren: 0.4 } } }}
+                    >
+                      {p.highlights.map((h, i) => (
+                        <motion.div
+                          key={h}
+                          variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } }}
+                          whileHover={reduce ? undefined : { scale: 1.02, y: -4 }}
+                          className="h-full rounded-2xl p-4 flex border"
+                          style={{ borderColor: THEME.border, background: THEME.surface2 }}
+                        >
+                          <div className="flex items-start gap-3 w-full">
+                            <motion.span 
+                              className="mt-1 h-2 w-2 shrink-0 rounded-full" 
+                              style={{ backgroundColor: i % 2 === 0 ? THEME.accent : THEME.accentSecondary }}
+                              animate={!reduce ? { scale: [1, 1.3, 1], opacity: [0.7, 1, 0.7] } : {}}
+                              transition={{ duration: 2, repeat: Infinity, delay: i * 0.2 }}
+                            />
+                            <p className="text-sm opacity-80">{h}</p>
+                          </div>
+                        </motion.div>
+                      ))}
+                    </motion.div>
                   </motion.div>
                 </AnimatePresence>
               </div>
 
-              {/* Navigation - Outside the grid */}
+              {/* Navigation */}
               <motion.div 
                 className="mt-10 flex items-center justify-center gap-4 sm:gap-6"
                 initial={{ opacity: 0, y: 20 }}
@@ -280,12 +283,11 @@ export default function Projects() {
                   onClick={prevProject}
                   whileHover={reduce ? undefined : { scale: 1.05 }}
                   whileTap={reduce ? undefined : { scale: 0.95 }}
-                  className="flex items-center gap-2 rounded-2xl px-5 py-3 text-sm font-medium"
+                  className="flex items-center gap-2 rounded-2xl px-5 py-3 text-sm font-medium border"
                   tabIndex={0}
                   style={{ 
-                    border: `1px solid ${p.theme.border}`, 
-                    background: p.theme.surface,
-                    color: p.theme.fg
+                    borderColor: THEME.border,
+                    background: THEME.surface,
                   }}
                 >
                   <span>←</span>
@@ -293,8 +295,8 @@ export default function Projects() {
                 </motion.button>
                 
                 <div 
-                  className="flex items-center gap-2 rounded-full px-4 py-2"
-                  style={{ background: p.theme.surface, border: `1px solid ${p.theme.border}` }}
+                  className="flex items-center gap-2 rounded-full px-4 py-2 border"
+                  style={{ background: THEME.surface, borderColor: THEME.border }}
                 >
                   {projects.map((_, i) => (
                     <motion.button
@@ -302,7 +304,7 @@ export default function Projects() {
                       onClick={() => setActive(i)}
                       className="h-2.5 rounded-full"
                       tabIndex={0}
-                      style={{ backgroundColor: i === active ? p.theme.accent : `${p.theme.fg}30` }}
+                      style={{ backgroundColor: i === active ? THEME.accent : "rgba(255,255,255,0.3)" }}
                       animate={{ width: i === active ? 24 : 10 }}
                       whileHover={{ scale: 1.2 }}
                       transition={{ duration: 0.3 }}
@@ -316,11 +318,10 @@ export default function Projects() {
                   tabIndex={0} 
                   whileHover={reduce ? undefined : { scale: 1.05 }}
                   whileTap={reduce ? undefined : { scale: 0.95 }}
-                  className="flex items-center gap-2 rounded-2xl px-5 py-3 text-sm font-medium"
+                  className="flex items-center gap-2 rounded-2xl px-5 py-3 text-sm font-medium border"
                   style={{ 
-                    border: `1px solid ${p.theme.border}`, 
-                    background: p.theme.surface,
-                    color: p.theme.fg
+                    borderColor: THEME.border,
+                    background: THEME.surface,
                   }}
                 >
                   <span className="hidden sm:inline">Next</span>

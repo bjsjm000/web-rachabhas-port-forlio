@@ -126,7 +126,7 @@ function ExperienceCard({
       animate={isInView ? { opacity: 1 } : { opacity: 0 }}
       transition={{ duration: 0.5 }}
     >
-      {/* Timeline dot */}
+      {/* Timeline dot - unified color */}
       <motion.div 
         className="absolute left-1/2 top-8 -translate-x-1/2 z-10 hidden lg:block"
         initial={{ scale: 0 }}
@@ -135,12 +135,12 @@ function ExperienceCard({
       >
         <motion.div 
           className="h-5 w-5 rounded-full border-4 border-[#070A12]"
-          style={{ backgroundColor: t.theme.accent }}
+          style={{ backgroundColor: index % 2 === 0 ? "#4D8FFF" : "#2DBE7E" }}
           animate={!reduce ? { 
             boxShadow: [
-              `0 0 0 0 ${t.theme.accent}50`,
-              `0 0 0 12px ${t.theme.accent}00`,
-              `0 0 0 0 ${t.theme.accent}50`
+              `0 0 0 0 ${index % 2 === 0 ? "#4D8FFF" : "#2DBE7E"}50`,
+              `0 0 0 12px ${index % 2 === 0 ? "#4D8FFF" : "#2DBE7E"}00`,
+              `0 0 0 0 ${index % 2 === 0 ? "#4D8FFF" : "#2DBE7E"}50`
             ]
           } : {}}
           transition={{ duration: 2, repeat: Infinity }}
